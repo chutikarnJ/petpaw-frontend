@@ -1,59 +1,51 @@
 <template>
   <div class="p-6">
     <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold">Product Management</h2>
-      <button
-        @click="showModal = true"
-        class="bg-brand-teal text-white px-4 py-2 rounded-lg hover:bg-teal-700"
-      >
+      <h2 class="text-3xl font-bold text-gray-800">Product Management</h2>
+      <button @click="showModal = true" class="bg-brand-teal text-white px-4 py-2 rounded-lg hover:bg-teal-700">
         + Add Product
       </button>
     </div>
 
     <!-- Product Table -->
-    <table class="w-full table-auto border border-gray-300 rounded-lg">
-      <thead class="bg-brand-dark text-white">
-        <tr>
-          <th class="p-2 text-left">Image</th>
-          <th class="p-2 text-left">Name</th>
-          <th class="p-2">Category</th>
-          <th class="p-2">Brand</th>
-          <th class="p-2">Type</th>
-          <th class="p-2">Price</th>
-          <th class="p-2">Stock</th>
-          <th class="p-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="product in products"
-          :key="product.id"
-          class="border-b border-gray-200 hover:bg-gray-200"
-        >
-          <td class="p-2">
-            <img
-              :src="product.imageUrl ? `${apiUrl}/public/uploads/${product.imageUrl}` : noImageIcon"
-              alt="Product"
-              class="h-16 w-16 object-cover rounded"
-            />
-          </td>
-          <td class="p-2">{{ product.name }}</td>
-          <td class="p-2 text-center">{{ product.category }}</td>
-          <td class="p-2 text-center">{{ product.brand }}</td>
-          <td class="p-2 text-center">{{ product.petTypes.join(", ") }}</td>
-          <td class="p-2 text-center">{{ product.price }} ฿</td>
-          <td class="p-2 text-center">{{ product.stock }}</td>
-          <td class="p-2 text-center space-x-2">
-            <button @click="editProduct(product)" class="text-blue-500 hover:underline">
-              Edit
-            </button>
-            <button @click="deleteProduct(product.id)" class="text-red-500 hover:underline">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="bg-white rounded-lg shadow p-6 overflow-x-auto">
+      <table class="w-full table-autotext-left">
+        <thead class="bg-gray-100 text-gray-600 uppercase">
+          <tr>
+            <th class="p-2 text-left">Image</th>
+            <th class="p-2 text-left">Name</th>
+            <th class="p-2">Category</th>
+            <th class="p-2">Brand</th>
+            <th class="p-2">Type</th>
+            <th class="p-2">Price</th>
+            <th class="p-2">Stock</th>
+            <th class="p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="product in products" :key="product.id" class="border-b border-gray-200 hover:bg-gray-200">
+            <td class="p-2">
+              <img :src="product.imageUrl ? `${apiUrl}/public/uploads/${product.imageUrl}` : noImageIcon" alt="Product"
+                class="h-16 w-16 object-cover rounded" />
+            </td>
+            <td class="p-2">{{ product.name }}</td>
+            <td class="p-2 text-center">{{ product.category }}</td>
+            <td class="p-2 text-center">{{ product.brand }}</td>
+            <td class="p-2 text-center">{{ product.petTypes.join(", ") }}</td>
+            <td class="p-2 text-center">{{ product.price }} ฿</td>
+            <td class="p-2 text-center">{{ product.stock }}</td>
+            <td class="p-2 text-center space-x-2">
+              <button @click="editProduct(product)" class="text-blue-500 hover:underline">
+                Edit
+              </button>
+              <button @click="deleteProduct(product.id)" class="text-red-500 hover:underline">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Pagination Controls -->
     <div class="flex justify-between items-center mt-6">
@@ -61,28 +53,19 @@
         Showing page {{ currentPage }} of {{ totalPages }} — Total {{ totalProducts }} products
       </p>
       <div class="space-x-2">
-        <button
-          @click="changePage(currentPage - 1)"
-          :disabled="currentPage === 1"
-          class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-        >
+        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1"
+          class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50">
           Prev
         </button>
-        <button
-          @click="changePage(currentPage + 1)"
-          :disabled="currentPage === totalPages"
-          class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-        >
+        <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages"
+          class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 disabled:opacity-50">
           Next
         </button>
       </div>
     </div>
 
     <!-- Add/Edit Modal -->
-    <div
-      v-if="showModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-    >
+    <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div class="bg-brand-light rounded-lg p-6 w-[600px] max-h-[90vh] overflow-y-auto space-y-4">
         <h3 class="text-xl font-semibold">
           {{ editingProduct ? "Edit Product" : "Add New Product" }}
@@ -103,12 +86,7 @@
         <!-- Description -->
         <div>
           <label class="block text-sm font-medium text-brand-dark mb-1">Description</label>
-          <textarea
-            v-model="form.description"
-            type="text"
-            placeholder="Enter product description"
-            class="input"
-          />
+          <textarea v-model="form.description" type="text" placeholder="Enter product description" class="input" />
         </div>
 
         <!-- Price -->
@@ -120,12 +98,7 @@
         <!-- Stock -->
         <div>
           <label class="block text-sm font-medium text-brand-dark mb-1">Stock Quantity</label>
-          <input
-            v-model="form.stock"
-            type="number"
-            placeholder="Enter stock quantity"
-            class="input"
-          />
+          <input v-model="form.stock" type="number" placeholder="Enter stock quantity" class="input" />
         </div>
 
         <!-- Category -->
@@ -144,18 +117,10 @@
         <!-- Pet Type -->
         <div class="mb-5">
           <label class="block text-sm font-medium mb-1">Pet Type</label>
-          <Multiselect
-            v-model="form.petTypes"
-            placeholder="Select pet types"
-            :options="petTypes"
-            :multiple="true"
-            :taggable="true"
-            @tag="addTag"
-            class="border border-gray-300 rounded-md text-sm"
-            :class="{
+          <Multiselect v-model="form.petTypes" placeholder="Select pet types" :options="petTypes" :multiple="true"
+            :taggable="true" @tag="addTag" class="border border-gray-300 rounded-md text-sm" :class="{
               'focus:ring-brand-teal focus:border-brand-teal': true,
-            }"
-          />
+            }" />
         </div>
 
         <!-- Image URL -->
@@ -164,10 +129,7 @@
           <input type="file" @change="handleImageUpload" class="input" />
         </div>
         <div v-if="form.imageUrl" class="mt-2">
-          <img
-            :src="`${apiUrl}/public/uploads/${form.imageUrl}`"
-            class="w-[150px] rounded-xl shadow-md"
-          />
+          <img :src="`${apiUrl}/public/uploads/${form.imageUrl}`" class="w-[150px] rounded-xl shadow-md" />
         </div>
 
         <div class="flex justify-end space-x-3 mt-4">
