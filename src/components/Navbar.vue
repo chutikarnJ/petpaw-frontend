@@ -64,6 +64,8 @@ import { useCartStore } from "@/stores/cart";
 import { useRouter } from "vue-router";
 import { ref, onMounted, computed } from "vue";
 import "primeicons/primeicons.css";
+import { nextTick } from "vue";
+
 const auth = useAuthStore();
 const cart = useCartStore();
 
@@ -93,6 +95,7 @@ onMounted(async () => {
 const handleLogout = async () => {
   await auth.logout();
   cart.reset();
+  await nextTick();
   router.push("/signin");
 };
 </script>
