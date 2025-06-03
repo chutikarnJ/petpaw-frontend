@@ -22,46 +22,34 @@
         <template v-if="auth.isLoggedIn">
           <router-link to="/cart" class="hover:text-brand-teal transition">
             <i class="pi pi-shopping-cart text-xl"></i>
-            <span
-              v-if="cart.count > 0"
-              class="absolute top-3 bg-red-500 text-white rounded-full text-xs px-1.5 py-0.5"
-            >
+            <span v-if="cart.count > 0" class="absolute top-3 bg-red-500 text-white rounded-full text-xs px-1.5 py-0.5">
               {{ cart.count }}
             </span>
           </router-link>
           <div class="relative" @click="toggleDropdown">
-            <button
-              class="flex items-center text-sm font-medium focus:outline-none hover:text-brand-teal"
-            >
+            <button class="flex items-center text-sm font-medium focus:outline-none hover:text-brand-teal">
               <i class="pi pi-user text-xl mr-2"></i>
               {{ auth.user?.username || "User" }}
             </button>
 
             <!-- Dropdown -->
-            <div
-              v-if="isDropdownOpen"
-              class="absolute right-0 mt-2 w-40 bg-brand-light text-brand-dark rounded-lg shadow-lg z-50 border transition-all duration-300 ease-in-out"
-            >
+            <div v-if="isDropdownOpen"
+              class="absolute right-0 mt-2 w-40 bg-brand-light text-brand-dark rounded-lg shadow-lg z-50 border transition-all duration-300 ease-in-out">
               <router-link to="/profile" class="block px-4 py-2 hover:bg-gray-100 transition">
                 My Profile
               </router-link>
               <router-link to="/order" class="block px-4 py-2 hover:bg-gray-100 transition">
                 Orders
               </router-link>
-              <button
-                @click="handleLogout"
-                class="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 transition"
-              >
+              <button @click="handleLogout"
+                class="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600 transition">
                 Log Out
               </button>
             </div>
           </div>
         </template>
         <template v-else>
-          <router-link
-            to="/signin"
-            class="bg-brand-teal hover:bg-teal-700 text-white px-4 py-1.5 rounded text-sm"
-          >
+          <router-link to="/signin" class="bg-brand-teal hover:bg-teal-700 text-white px-4 py-1.5 rounded text-sm">
             Sign In
           </router-link>
         </template>
@@ -88,11 +76,16 @@ const toggleDropdown = () => {
 };
 
 onMounted(async () => {
-  cart.fetchCartCount();
+
+  await auth.fetchProfile()
+
+  if (auth.isLoggedIn) {
+    cart.fetchCartCount();
+  }
 });
 
-const handleLogout = () => {
-  auth.logout();
+const handleLogout = async () => {
+  await auth.logout();
   cart.reset();
   router.push("/signin");
 };
