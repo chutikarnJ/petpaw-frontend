@@ -92,15 +92,13 @@ onMounted(async () => {
 
 const handleLogout = async () => {
   await auth.logout();
+  auth.reset();
   cart.reset();
   router.push("/signin");
 };
 
-watch(isLoggedIn, (newVal) => {
-    if (newVal) { 
-        cart.fetchCartCount();
-    } else { 
-        cart.reset(); 
-    }
-}, { immediate: true }); 
+watch(() => auth.user, (val) => {
+  console.log("auth.user changed:", val);
+});
+
 </script>

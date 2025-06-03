@@ -1,4 +1,3 @@
-// stores/auth.js
 import { defineStore } from "pinia";
 import api from "@/libs/api";
 
@@ -31,12 +30,16 @@ export const useAuthStore = defineStore("auth", {
     async logout() {
       try {
         await api.post("/auth/logout");
+        console.log("logout api");
       } catch (e) {
         console.warn("Logout failed", e);
       }
       this.$reset();
       localStorage.removeItem("auth");
+      console.log(localStorage.getItem("auth"));
       console.log("romove auth");
+    },
+     reset() {
       this.user = null;
     },
   },
