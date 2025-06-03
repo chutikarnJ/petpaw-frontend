@@ -36,6 +36,7 @@ export const useAuthStore = defineStore("auth", {
       }
       this.$reset();
       localStorage.removeItem("auth");
+      console.log("romove auth");
       this.user = null;
     },
   },
