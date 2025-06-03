@@ -38,6 +38,8 @@ export const useAuthStore = defineStore("auth", {
       localStorage.removeItem("auth");
       console.log(localStorage.getItem("auth"));
       console.log("romove auth");
+      console.log(this.isLoggedIn);
+      
     },
      reset() {
       this.user = null;

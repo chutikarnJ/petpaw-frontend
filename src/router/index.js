@@ -61,6 +61,8 @@ router.beforeEach(async (to, from, next) => {
   // If no user loaded but token exists (cookie), fetch profile
   if (auth.user === null && !auth.isLoggedIn) {
     await auth.fetchProfile();
+    console.log('fetch profile index');
+    
   }
 
   if (to.meta.requiresAuth) {
