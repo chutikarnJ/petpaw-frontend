@@ -28,6 +28,7 @@ export const useAuthStore = defineStore("auth", {
     async logout() {
       await api.post("/auth/logout");
       this.$reset();
+      localStorage.removeItem("auth");
       this.user = null;
     },
   },
