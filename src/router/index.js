@@ -9,6 +9,7 @@ import ProductView from "@/pages/shop/productDetail.vue";
 import CartView from "@/pages/shop/cart.vue";
 import CheckoutView from "@/pages/shop/checkout.vue";
 import OrderView from "@/pages/shop/order.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const routes = [
   { path: "/", name: "Home", component: HomeView },
@@ -19,7 +20,6 @@ const routes = [
     path: "/shop/:id",
     name: "ProductDetail",
     component: ProductView,
-    meta: { requiresAuth: true },
   },
   {
     path: "/cart",
@@ -48,6 +48,7 @@ const routes = [
       { path: "orders", component: () => import("@/pages/admin/orders.vue") },
     ],
   },
+  { path: "/:pathMatch(.*)*", name: "NotFound", redirect: "/" },
 ];
 
 const router = createRouter({
@@ -55,20 +56,17 @@ const router = createRouter({
   routes,
 });
 
-import { useAuthStore } from "@/stores/auth";
-
 router.beforeEach(async (to, from, next) => {
-  const { useAuthStore } = await import("@/stores/auth");
   const auth = useAuthStore();
   // If no user loaded but token exists (cookie), fetch profile
-  if (auth.user === null && auth.isLoggedIn === false) {
+  if (auth.user === null && !auth.isLoggedIn) {
     await auth.fetchProfile();
   }
 
   if (to.meta.requiresAuth) {
-    next("/signin");
-  } else {
-    next();
+    if (!auth.isLoggedIn) {
+      return next("/signin");
+    }
   }
 
   if (to.meta.requiresAdmin) {
