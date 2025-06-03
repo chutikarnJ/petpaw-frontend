@@ -10,6 +10,7 @@ import CartView from "@/pages/shop/cart.vue";
 import CheckoutView from "@/pages/shop/checkout.vue";
 import OrderView from "@/pages/shop/order.vue";
 import { useAuthStore } from "@/stores/auth";
+import { useCartStore } from "@/stores/cart";
 
 const routes = [
   { path: "/", name: "Home", component: HomeView },
@@ -58,11 +59,15 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore();
+  const cart = useCartStore();
   // If no user loaded but token exists (cookie), fetch profile
   // if (auth.user === null && !auth.isLoggedIn) {
   //   await auth.fetchProfile();
   //   console.log('fetch profile index');
   // }
+
+  console.log(auth.isLoggedIn);
+  
 
   if (auth.isLoggedIn) {
     await auth.fetchProfile();
