@@ -62,13 +62,11 @@
 import { useAuthStore } from "@/stores/auth";
 import { useCartStore } from "@/stores/cart";
 import { useRouter } from "vue-router";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import "primeicons/primeicons.css";
-import { nextTick } from "vue";
 
 const auth = useAuthStore();
 const cart = useCartStore();
-
 const router = useRouter();
 
 const isDropdownOpen = ref(false);
@@ -81,11 +79,11 @@ const isLoggedIn = computed(() => auth.isLoggedIn);
 const username = computed(() => auth.user?.username || "User");
 const cartCount = computed(() => cart.count);
 
-onMounted(async () => {
 
-  await auth.fetchProfile()
-  console.log("auth.user", auth.user);
-  console.log("auth.isLoggedIn", auth.isLoggedIn);
+onMounted(async () => {
+  // await auth.fetchProfile()
+  // console.log("auth.user", auth.user);
+  // console.log("auth.isLoggedIn", auth.isLoggedIn);
 
   if (auth.isLoggedIn) {
     cart.fetchCartCount();
@@ -95,7 +93,14 @@ onMounted(async () => {
 const handleLogout = async () => {
   await auth.logout();
   cart.reset();
-  await nextTick();
   router.push("/signin");
 };
+
+watch(isLoggedIn, (newVal) => {
+    if (newVal) { 
+        cart.fetchCartCount();
+    } else { 
+        cart.reset(); 
+    }
+}, { immediate: true }); 
 </script>

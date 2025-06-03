@@ -19,18 +19,21 @@ const routes = [
     path: "/shop/:id",
     name: "ProductDetail",
     component: ProductView,
+    meta: { requiresAuth: true },
   },
   {
     path: "/cart",
     name: "Cart",
     component: CartView,
+    meta: { requiresAuth: true },
   },
   {
     path: "/cart/checkout",
     name: "CartCheckout",
     component: CheckoutView,
+    meta: { requiresAuth: true },
   },
-  { path: "/order", name: "Order", component: OrderView },
+  { path: "/order", name: "Order", component: OrderView, meta: { requiresAuth: true } },
 
   // Admin-only routes
   { path: "/admin/signin", name: "AdminSignIn", component: AdminSignIn },
@@ -55,13 +58,19 @@ const router = createRouter({
 import { useAuthStore } from "@/stores/auth";
 
 router.beforeEach(async (to, from, next) => {
+  const { useAuthStore } = await import("@/stores/auth");
   const auth = useAuthStore();
   // If no user loaded but token exists (cookie), fetch profile
-  if (!auth.user) {
-    try {
-      await auth.fetchProfile();
-    } catch (err) {}
+  if (auth.user === null && auth.isLoggedIn === false) {
+    await auth.fetchProfile();
   }
+
+  if (to.meta.requiresAuth) {
+    next("/signin");
+  } else {
+    next();
+  }
+
   if (to.meta.requiresAdmin) {
     if (!auth.user || auth.user.role !== "ADMIN") {
       return next("/admin/signin");
