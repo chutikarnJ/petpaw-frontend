@@ -59,9 +59,17 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore();
   // If no user loaded but token exists (cookie), fetch profile
-  if (auth.user === null && !auth.isLoggedIn) {
+  // if (auth.user === null && !auth.isLoggedIn) {
+  //   await auth.fetchProfile();
+  //   console.log('fetch profile index');
+  // }
+
+  if (auth.isLoggedIn) {
     await auth.fetchProfile();
     console.log('fetch profile index');
+    await cart.fetchCartCount();
+    console.log('fetch cart index');
+    
     
   }
 
