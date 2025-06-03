@@ -16,7 +16,6 @@ export const useAuthStore = defineStore("auth", {
 
       const userRes = await api.get("/user/profile");
       this.user = userRes.data;
-      
     },
     async fetchProfile() {
       try {
@@ -28,6 +27,7 @@ export const useAuthStore = defineStore("auth", {
     },
     async logout() {
       await api.post("/auth/logout");
+      this.$reset();
       this.user = null;
     },
   },
