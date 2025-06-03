@@ -23,13 +23,13 @@
           <router-link to="/cart" class="hover:text-brand-teal transition">
             <i class="pi pi-shopping-cart text-xl"></i>
             <span v-if="cartCount > 0" class="absolute top-3 bg-red-500 text-white rounded-full text-xs px-1.5 py-0.5">
-              {{ cart.count }}
+              {{ cartCount }}
             </span>
           </router-link>
           <div class="relative" @click="toggleDropdown">
             <button class="flex items-center text-sm font-medium focus:outline-none hover:text-brand-teal">
               <i class="pi pi-user text-xl mr-2"></i>
-              {{ username || "User" }}
+              {{ username }}
             </button>
 
             <!-- Dropdown -->
