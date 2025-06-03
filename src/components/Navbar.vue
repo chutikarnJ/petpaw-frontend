@@ -62,7 +62,7 @@
 import { useAuthStore } from "@/stores/auth";
 import { useCartStore } from "@/stores/cart";
 import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import "primeicons/primeicons.css";
 const auth = useAuthStore();
 const cart = useCartStore();
@@ -82,6 +82,8 @@ const cartCount = computed(() => cart.count);
 onMounted(async () => {
 
   await auth.fetchProfile()
+  console.log("auth.user", auth.user);
+  console.log("auth.isLoggedIn", auth.isLoggedIn);
 
   if (auth.isLoggedIn) {
     cart.fetchCartCount();
