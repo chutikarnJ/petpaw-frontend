@@ -19,17 +19,17 @@
       <!-- Right actions -->
       <div class="flex items-center space-x-5">
         <!-- Auth Section -->
-        <template v-if="auth.isLoggedIn">
+        <template v-if="isLoggedIn">
           <router-link to="/cart" class="hover:text-brand-teal transition">
             <i class="pi pi-shopping-cart text-xl"></i>
-            <span v-if="cart.count > 0" class="absolute top-3 bg-red-500 text-white rounded-full text-xs px-1.5 py-0.5">
+            <span v-if="cartCount > 0" class="absolute top-3 bg-red-500 text-white rounded-full text-xs px-1.5 py-0.5">
               {{ cart.count }}
             </span>
           </router-link>
           <div class="relative" @click="toggleDropdown">
             <button class="flex items-center text-sm font-medium focus:outline-none hover:text-brand-teal">
               <i class="pi pi-user text-xl mr-2"></i>
-              {{ auth.user?.username || "User" }}
+              {{ username || "User" }}
             </button>
 
             <!-- Dropdown -->
@@ -74,6 +74,10 @@ const isDropdownOpen = ref(false);
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
 };
+
+const isLoggedIn = computed(() => auth.isLoggedIn);
+const username = computed(() => auth.user?.username || "User");
+const cartCount = computed(() => cart.count);
 
 onMounted(async () => {
 

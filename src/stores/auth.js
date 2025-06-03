@@ -35,7 +35,7 @@ export const useAuthStore = defineStore("auth", {
         console.warn("Logout failed", e);
       }
       this.$reset();
-      localStorage.removeItem("auth"); // this clears persisted state
+      localStorage.removeItem("auth");
       this.user = null;
     },
   },
