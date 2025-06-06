@@ -6,6 +6,7 @@ export const useAuthStore = defineStore("auth", {
     user: null,
   }),
   persist: {
+    //add to let pinia stores to perist across refreshes
     key: "auth",
     storage: localStorage,
   },
@@ -15,14 +16,15 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async signIn(email, password) {
       await api.post("/auth/signin", { email, password }); //set token in cookie
-
       const userRes = await api.get("/user/profile");
       this.user = userRes.data;
     },
     async fetchProfile() {
       try {
-        const res = await api.get("/user/profile");
-        this.user = res.data;
+        if (this.isLoggedIn) {
+          const res = await api.get("/user/profile");
+          this.user = res.data;
+        }
       } catch (err) {
         this.user = null;
       }
@@ -39,9 +41,8 @@ export const useAuthStore = defineStore("auth", {
       console.log(localStorage.getItem("auth"));
       console.log("romove auth");
       console.log(this.isLoggedIn);
-      
     },
-     reset() {
+    reset() {
       this.user = null;
     },
   },

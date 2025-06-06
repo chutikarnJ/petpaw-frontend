@@ -79,11 +79,7 @@ const isLoggedIn = computed(() => auth.isLoggedIn);
 const username = computed(() => auth.user?.username || "User");
 const cartCount = computed(() => cart.count);
 
-
 onMounted(async () => {
-  // await auth.fetchProfile()
-  // console.log("auth.user", auth.user);
-  // console.log("auth.isLoggedIn", auth.isLoggedIn);
 
   if (auth.isLoggedIn) {
     cart.fetchCartCount();

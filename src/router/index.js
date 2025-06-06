@@ -55,27 +55,23 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 };
+  },
 });
 
+//run everytime when router to new page
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore();
   const cart = useCartStore();
-  // If no user loaded but token exists (cookie), fetch profile
-  // if (auth.user === null && !auth.isLoggedIn) {
-  //   await auth.fetchProfile();
-  //   console.log('fetch profile index');
-  // }
 
-  console.log(auth.isLoggedIn);
-  
+  // console.log(auth.isLoggedIn);
 
   if (auth.isLoggedIn) {
     await auth.fetchProfile();
-    console.log('fetch profile index');
+    console.log("fetch profile index");
     await cart.fetchCartCount();
-    console.log('fetch cart index');
-    
-    
+    console.log("fetch cart index");
   }
 
   if (to.meta.requiresAuth) {
